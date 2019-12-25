@@ -122,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void uploadFile() {
         if (mImageUri != null) {
-            StorageReference fileReference = mStorageRef.child(System.currentTimeMillis()
+            final StorageReference fileReference = mStorageRef.child(System.currentTimeMillis()
                     + "." + getFileExtension(mImageUri));
 
             mUploadTask = fileReference.putFile(mImageUri)
@@ -137,11 +137,27 @@ public class MainActivity extends AppCompatActivity {
                                 }
                             }, 500);
 
-                            Toast.makeText(MainActivity.this, "Upload successful", Toast.LENGTH_LONG).show();
-                            Upload upload = new Upload(mEditTextFileName.getText().toString().trim(),
-                                    taskSnapshot.getUploadSessionUri().toString());
-                            String uploadId = mDatabaseRef.push().getKey();
-                            mDatabaseRef.child(uploadId).setValue(upload);
+
+                            fileReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+
+
+                                    Toast.makeText(MainActivity.this, "Upload successful", Toast.LENGTH_LONG).show();
+                                    Upload upload = new Upload(mEditTextFileName.getText().toString().trim(),
+                                            uri.toString());
+                                    String uploadId = mDatabaseRef.push().getKey();
+                                    mDatabaseRef.child(uploadId).setValue(upload);
+
+                                }
+                            });
+
+//
+//                            Toast.makeText(MainActivity.this, "Upload successful", Toast.LENGTH_LONG).show();
+//                            Upload upload = new Upload(mEditTextFileName.getText().toString().trim(),
+//                                    taskSnapshot.getUploadSessionUri().toString());
+//                            String uploadId = mDatabaseRef.push().getKey();
+//                            mDatabaseRef.child(uploadId).setValue(upload);
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
