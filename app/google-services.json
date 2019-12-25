@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "815878462130",
+    "firebase_url": "https://printapp-3263a.firebaseio.com",
+    "project_id": "printapp-3263a",
+    "storage_bucket": "printapp-3263a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:815878462130:android:90ef86b622bc59f9b607ab",
+        "android_client_info": {
+          "package_name": "com.example.printapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "815878462130-qp69ubr0e1baroirbanuf96vtkpo02ig.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAxSOh3tMDXpWJ5155j2DoDL8NGZL4LSIM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "815878462130-qp69ubr0e1baroirbanuf96vtkpo02ig.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
