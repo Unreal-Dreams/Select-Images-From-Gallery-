@@ -22,8 +22,12 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -31,10 +35,14 @@ import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
+import org.w3c.dom.Text;
+
+import java.util.Map;
+
 public class MainActivity extends AppCompatActivity {
 
     private static final int PICK_IMAGE_REQUEST = 1;
-
+    private int sum=0;
     private Button mButtonChooseImage;
     private Button mButtonUpload;
     private TextView mTextViewShowUploads;
@@ -42,6 +50,8 @@ public class MainActivity extends AppCompatActivity {
     private ImageView mImageView;
     private ProgressBar mProgressBar;
 
+    private TextView txt_total;
+    private int overToatalPrice=0;
     private Uri mImageUri;
 
     private StorageReference mStorageRef;
@@ -62,9 +72,10 @@ public class MainActivity extends AppCompatActivity {
         mEditTextFileName = findViewById(R.id.edit_text_file_name);
         mImageView = findViewById(R.id.image_view);
         mProgressBar = findViewById(R.id.progress_bar);
+        txt_total=(TextView) findViewById(R.id.txt_total);
 
         mStorageRef = FirebaseStorage.getInstance().getReference("uploads");
-        mDatabaseRef = FirebaseDatabase.getInstance().getReference("uploads");
+        mDatabaseRef = FirebaseDatabase.getInstance().getReference("uploads").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
         mButtonChooseImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,6 +91,24 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, "Upload in progress", Toast.LENGTH_SHORT).show();
                 } else {
                     uploadFile();
+//                    mDatabaseRef.addValueEventListener(new ValueEventListener() {
+//                        @Override
+//                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                            for(DataSnapshot ds:dataSnapshot.getChildren()) {
+//                                Map<String, Object> map = (Map<String, Object>) ds.getValue();
+//                                Object price=map.get("name");
+//                                int pvalue=Integer.parseInt(String.valueOf(price));
+//                                 sum += pvalue;
+//
+//                                 txt_total.setText(String.valueOf(sum));
+//                            }
+//                        }
+//
+//                        @Override
+//                        public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                        }
+//                    });
                 }
 
             }
@@ -146,8 +175,18 @@ public class MainActivity extends AppCompatActivity {
                                     Toast.makeText(MainActivity.this, "Upload successful", Toast.LENGTH_LONG).show();
                                     Upload upload = new Upload(mEditTextFileName.getText().toString().trim(),
                                             uri.toString());
+                                    //Total Cost
+                                    if(mEditTextFileName.getText().toString().trim().length()==0){
+                                        overToatalPrice=overToatalPrice+2;
+                                    }else {
+                                        int currentpages = (Integer.valueOf(mEditTextFileName.getText().toString().trim())) * 2;
+                                        overToatalPrice = overToatalPrice + currentpages;
+                                    }
+                                    //
                                     String uploadId = mDatabaseRef.push().getKey();
                                     mDatabaseRef.child(uploadId).setValue(upload);
+                                    txt_total.setText(String.valueOf(overToatalPrice));
+
 
                                 }
                             });

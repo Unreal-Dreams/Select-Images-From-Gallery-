@@ -57,4 +57,19 @@
         android:text="Show Uploads"
         android:textSize="16sp" />
 
+    <TextView
+        android:id="@+id/txt_total"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/image_view"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="39dp"
+        android:layout_marginTop="38dp"
+        android:layout_marginEnd="66dp"
+        android:layout_marginBottom="7dp"
+        android:layout_toStartOf="@+id/button_upload"
+        android:text="Total Amount"
+        android:textColor="#070505" />
+
 </RelativeLayout>
